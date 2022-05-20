@@ -7,3 +7,4 @@
 3. Сопряженные градиенты (Fletcher-Reeves и Polak-Ribiere)
 4. Ньютон-Рафсон
 5. BFGS
+6. L-BFGS

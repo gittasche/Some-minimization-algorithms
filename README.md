@@ -8,4 +8,4 @@ Implementation of some unconstrained optimization algorithms:
 5. L-BFGS
 
 References:
-J. Nocedal, S. J Wright \textit{Numerical Optimization}, 2006
+J. Nocedal, S. J Wright Numerical Optimization, 2006

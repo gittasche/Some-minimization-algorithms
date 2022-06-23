@@ -1,10 +1,11 @@
 # Some-minimization-algorithms
+Implementation of some unconstrained optimization algorithms:
 
-Реализация методов численной оптимизации:
+1. Gradient descent
+2. Conjugate gradients (Fletcher-Reeves & Polak-Ribiere)
+3. Newton-Raphson
+4. BFGS
+5. L-BFGS
 
-1. Алгоритм линейного поиска минимума
-2. Градиентный спуск
-3. Сопряженные градиенты (Fletcher-Reeves и Polak-Ribiere)
-4. Ньютон-Рафсон
-5. BFGS
-6. L-BFGS
+References:
+J. Nocedal, S. J Wright Numerical Optimization, 2006

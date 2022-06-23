@@ -3,7 +3,7 @@ from .base import BaseOptimizer
 
 class GradientDescent(BaseOptimizer):
     """
-    Implementation of gradient descent
+    Implementation of gradient descent method.
 
     Parameters
     ----------
@@ -27,10 +27,15 @@ class GradientDescent(BaseOptimizer):
 
         Parameters
         ----------
-        func : function
+        func : function -> float
             function to minimize
         x0 : ndarray of float
             initial point
+            
+        Returns
+        -------
+        xk : ndarray of float
+            final iteration point (it is a min point if algorighm converged)
         """
         self.num_args = len(x0)
         self.grad_ = self._grad_func(func)
@@ -40,7 +45,7 @@ class GradientDescent(BaseOptimizer):
         
         self.num_steps_ = 0
         while self.num_steps_ < self.MAX_DESC_ITER:
-            alpha_opt = self.line_search(func, xk, pk)
+            alpha_opt = self._line_search(func, xk, pk)
 
             if alpha_opt is None:
                 break
@@ -55,4 +60,4 @@ class GradientDescent(BaseOptimizer):
         return xk
     
     def _grad_func(self, func):
-        return super().grad_func(func)
+        return super()._grad_func(func)

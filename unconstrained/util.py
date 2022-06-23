@@ -9,7 +9,7 @@ def gradient(func, num_args):
 
     Parameters
     ----------
-    func : function
+    func : function -> float
         current function
     num_args : int
         number of function arguments
@@ -25,7 +25,7 @@ def hessian(func, num_args):
 
     Parameters
     ----------
-    func : function
+    func : function -> float
         current function
     num_args : int
         number of function arguments

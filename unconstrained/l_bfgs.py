@@ -3,7 +3,7 @@ from .base import BaseOptimizer
 
 class L_BFGS(BaseOptimizer):
     """
-    Implementation of BFGS
+    Implementation of Limited memory BFGS method.
 
     Parameters
     ----------
@@ -30,10 +30,15 @@ class L_BFGS(BaseOptimizer):
 
         Parameters
         ----------
-        func : function
+        func : function -> float
             function to minimize
         x0 : ndarray of float
             initial point
+            
+        Returns
+        -------
+        xk : ndarray of float
+            final iteration point (it is a min point if algorighm converged)
         """
         xk = x0
         self.num_args = len(x0)
@@ -49,12 +54,12 @@ class L_BFGS(BaseOptimizer):
         while self.num_steps_ < self.MAX_DESC_ITER:
             inv_hfk = np.dot(s[k], y[k]) / np.dot(y[k], y[k]) * np.identity(self.num_args)
             
-            pk = -self.BFGS_recursion(s, y, gfk, inv_hfk, k)
-            alpha_opt = self.line_search(func, xk, pk)
+            pk = -self._BFGS_recursion(s, y, gfk, inv_hfk, k)
+            alpha_opt = self._line_search(func, xk, pk)
             
             if alpha_opt is None:
                 pk = -gfk
-                alpha_opt = self.line_search(func, xk, pk)
+                alpha_opt = self._line_search(func, xk, pk)
             
             if alpha_opt is None:
                 break
@@ -78,10 +83,10 @@ class L_BFGS(BaseOptimizer):
             self.points_ = np.append(self.points_, [xk_new], axis=0)
             gfk = gfk_new
             self.num_steps_ += 1
-        return self
+        return xk
 
     @staticmethod
-    def BFGS_recursion(s, y, gfk, inv_hfk, k):
+    def _BFGS_recursion(s, y, gfk, inv_hfk, k):
         """
         L-BFGS two-loop recursion algorithm.
         Algorithm 7.4 from Nocedal Wright book.
@@ -115,4 +120,4 @@ class L_BFGS(BaseOptimizer):
         return r
 
     def _grad_func(self, func):
-        return super().grad_func(func)
+        return super()._grad_func(func)

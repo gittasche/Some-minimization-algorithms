@@ -26,37 +26,37 @@ class BaseOptimizer(object):
     def optimize(self, func=None, x0=None):
         raise NotImplementedError()
 
-    def grad_func(self, func):
+    def _grad_func(self, func):
         """
         Automatic calculation of gradient
         analytic expression.
 
         Parameters
         ----------
-        func : function
+        func : function -> float
             function to minimize
         """
         return util.gradient(func, self.num_args)
 
-    def hess_func(self, func):
+    def _hess_func(self, func):
         """
         Automatic calculation of hessian
         analytic expression.
         
         Parameters
         ----------
-        func : function
+        func : function -> float
             function to minimize
         """
         return util.hessian(func, self.num_args)
     
-    def line_search(self, func, xk, pk, MAX_SRCH_ITER=100):
+    def _line_search(self, func, xk, pk, MAX_SRCH_ITER=100):
         """
         Backtracking Line Search.
 
         Parameters
         ----------
-        func : function
+        func : function -> float
             function to minimize
         xk : ndarray of float
             current point
@@ -114,5 +114,5 @@ class BaseOptimizer(object):
         ax.plot(points[:,0], points[:,1], '-x', zorder=0)
         ax.set_xlabel("x")
         ax.set_ylabel("y")
-        
+
         plt.show()

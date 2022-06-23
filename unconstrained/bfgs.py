@@ -3,7 +3,7 @@ from .base import BaseOptimizer
 
 class BFGS(BaseOptimizer):
     """
-    Implementation of BFGS
+    Implementation of BFGS method.
 
     Parameters
     ----------
@@ -27,10 +27,15 @@ class BFGS(BaseOptimizer):
 
         Parameters
         ----------
-        func : function
+        func : function -> float
             function to minimize
         x0 : ndarray of float
             initial point
+            
+        Returns
+        -------
+        xk : ndarray of float
+            final iteration point (it is a min point if algorighm converged)
         """
         xk = x0
         self.num_args = len(x0)
@@ -42,11 +47,11 @@ class BFGS(BaseOptimizer):
         self.num_steps_ = 0
         while self.num_steps_ < self.MAX_DESC_ITER:
             pk = -np.dot(inv_hfk, gfk)
-            alpha_opt = self.line_search(func, xk, pk)
+            alpha_opt = self._line_search(func, xk, pk)
             
             if alpha_opt is None:
                 pk = -gfk
-                alpha_opt = self.line_search(func, xk, pk)
+                alpha_opt = self._line_search(func, xk, pk)
                 
             if alpha_opt is None:
                 break
@@ -68,7 +73,7 @@ class BFGS(BaseOptimizer):
                 
             xk = xk_new
             gfk = gfk_new
-        return self
+        return xk
     
     @staticmethod
     def _sherman_morrison(sk, yk, dim, inv):
@@ -98,4 +103,4 @@ class BFGS(BaseOptimizer):
         return inv
 
     def _grad_func(self, func):
-        return super().grad_func(func)
+        return super()._grad_func(func)

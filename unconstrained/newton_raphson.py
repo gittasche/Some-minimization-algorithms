@@ -38,7 +38,6 @@ class NewtonRaphson(BaseOptimizer):
             final iteration point (it is a min point if algorighm converged)
         """
         xk = x0
-        self.num_args = len(x0)
         self.grad_ = self._grad_func(func)
         gfk = self.grad_(x0)
         self.hess_ = self._hess_func(func)

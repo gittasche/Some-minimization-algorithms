@@ -38,10 +38,10 @@ class BFGS(BaseOptimizer):
             final iteration point (it is a min point if algorighm converged)
         """
         xk = x0
-        self.num_args = len(x0)
+        n = x0.shape[0]
         self.grad_ = self._grad_func(func)
         gfk = self.grad_(xk)
-        inv_hfk = np.identity(self.num_args)
+        inv_hfk = np.identity(n)
         self.points_ = np.array([x0])
         
         self.num_steps_ = 0
@@ -64,7 +64,7 @@ class BFGS(BaseOptimizer):
             self.points_ = np.append(self.points_, [xk_new], axis=0)
             self.num_steps_ += 1
             
-            inv_hfk = self._sherman_morrison(sk, yk, self.num_args, inv_hfk)
+            inv_hfk = self._sherman_morrison(sk, yk, n, inv_hfk)
             if inv_hfk is None:
                 break
             

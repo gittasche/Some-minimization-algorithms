@@ -37,7 +37,6 @@ class GradientDescent(BaseOptimizer):
         xk : ndarray of float
             final iteration point (it is a min point if algorighm converged)
         """
-        self.num_args = len(x0)
         self.grad_ = self._grad_func(func)
         xk = x0
         pk = -self.grad_(x0)

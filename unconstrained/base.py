@@ -1,8 +1,8 @@
 from abc import abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
-from . import util
 from matplotlib import cm
+from autograd import grad, hessian
 
 class BaseOptimizer(object):
     """
@@ -14,13 +14,10 @@ class BaseOptimizer(object):
         initial vaulue for line search
     c1 : float
         Armijo condition parameter
-    num_args : ndarray of int
-        number of arguments
     """
-    def __init__(self, alpha0=0.5, c1=0.1, num_args=0):
+    def __init__(self, alpha0=0.5, c1=0.1):
         self.alpha0 = alpha0
         self.c1 = c1
-        self.num_args = num_args
 
     @abstractmethod
     def optimize(self, func=None, x0=None):
@@ -36,7 +33,7 @@ class BaseOptimizer(object):
         func : function -> float
             function to minimize
         """
-        return util.gradient(func, self.num_args)
+        return grad(func)
 
     def _hess_func(self, func):
         """
@@ -48,7 +45,7 @@ class BaseOptimizer(object):
         func : function -> float
             function to minimize
         """
-        return util.hessian(func, self.num_args)
+        return hessian(func)
     
     def _line_search(self, func, xk, pk, MAX_SRCH_ITER=100):
         """
@@ -65,7 +62,7 @@ class BaseOptimizer(object):
         MAX_SRCH_ITER : int
             number of maximum iterations
         """
-        first_cond = lambda alpha: func(*(xk + alpha*pk)) - func(*xk) - self.c1*alpha*np.dot(self.grad_(xk), pk)
+        first_cond = lambda alpha: func(xk + alpha*pk) - func(xk) - self.c1*alpha*np.dot(self.grad_(xk), pk)
         
         num_steps = 0
         alpha = self.alpha0
@@ -96,14 +93,14 @@ class BaseOptimizer(object):
         Y = np.arange(y_min, y_max, resolution)
 
         X, Y = np.meshgrid(X, Y)
-        Z = func(X, Y)
+        Z = func(np.array([X, Y]))
         
         fig = plt.figure(figsize=(12,6))
         ax = fig.add_subplot(1, 2, 1, projection='3d')
 
         ax.plot_surface(X, Y, Z, cmap=cm.jet, alpha=0.5)
         ax.contour(X, Y, Z, zdir='Z', offset=-1, cmap=cm.jet, alpha=0.5)
-        ax.plot(points[:,0], points[:,1], func(points[:,0], points[:,1]), '-o', color='black')
+        ax.plot(points[:,0], points[:,1], func(points.T), '-o', color='black')
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")

@@ -41,7 +41,7 @@ class L_BFGS(BaseOptimizer):
             final iteration point (it is a min point if algorighm converged)
         """
         xk = x0
-        self.num_args = len(x0)
+        n = x0.shape[0]
         self.grad_ = self._grad_func(func)
         gfk = self.grad_(xk)
         self.points_ = np.array([x0])
@@ -52,7 +52,7 @@ class L_BFGS(BaseOptimizer):
         
         self.num_steps_ = 0
         while self.num_steps_ < self.MAX_DESC_ITER:
-            inv_hfk = np.dot(s[k], y[k]) / np.dot(y[k], y[k]) * np.identity(self.num_args)
+            inv_hfk = np.dot(s[k], y[k]) / np.dot(y[k], y[k]) * np.identity(n)
             
             pk = -self._BFGS_recursion(s, y, gfk, inv_hfk, k)
             alpha_opt = self._line_search(func, xk, pk)
